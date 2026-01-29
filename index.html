@@ -69,7 +69,7 @@
         const AIChatWidget = ({ fbUrl, messengerUrl }) => {
             const [isOpen, setIsOpen] = useState(false);
             const [messages, setMessages] = useState([
-                { role: 'assistant', text: '你好！我是爵序小助手 🎷。想了解 2026 的招募資訊，或是關於劉騰文教授的問題嗎？隨時問我喔！' }
+                { role: 'assistant', text: '你好！我是 JazzShip 小助手 🎷。我已經準備好為你解答 2026 招募的各種疑問了！想了解報名方式、練習地點，或是問問劉教授的事呢？' }
             ]);
             const [input, setInput] = useState('');
             const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +82,33 @@
             }, [messages]);
 
             const fetchChatResponse = async (userQuery) => {
-                const systemPrompt = `你是「JazzShip Orchestra 爵序大樂團」的 AI 客服。風格：親切、專業、可愛。背景：2026 招募主題「聲命力的接力」，指揮為劉騰文教授（冷面笑將），樂團位於台中。樂團包含經典傳承 Big Band、律動地基 Rhythm Section 以及個人魅力流行團。`;
+                // --- 智慧回覆調整區 ---
+                const systemPrompt = `
+                    # 角色設定
+                    你現在是「JazzShip Orchestra 爵序大樂團」的 AI 客服大使「小爵」。
+                    個性：非常親切、充滿音樂熱情、有點小幽默，說話時喜歡加入音樂相關的雙關語。
+                    
+                    # 核心知識庫
+                    - 招募主題：「聲命力的接力」。
+                    - 指揮：劉騰文教授。他有音樂博士學位，主修薩克斯風。他是團員眼中的「冷面笑將」，看起來嚴肅但其實很有梗。
+                    - 組別詳情：
+                        1. 經典傳承 Big Band：主要徵求小號、長號、薩克斯風。特色是不用擔心即興，看譜吹奏就能享受大合奏震撼。
+                        2. 律動地基 Rhythm Section：節奏組的靈魂，歡迎鋼琴、Bass、鼓組、吉他手加入。
+                        3. 個人魅力流行團：專為薩克斯風手設計，強調音色故事與技巧。
+                    - 地點：406臺中市北屯區瀋陽路二段198-2號7F。
+                    - 核心精神：降低爵士門檻，讓大家都能玩音樂。
+                    
+                    # 常見問答回覆規範 (重要)
+                    1. 請問要如何報名：請引導他們點選頁面上的「立刻加入我們」按鈕，連結會開啟 Linktree 報名表單。
+                    2. 如果沒有爵士樂經驗也可以報名嗎：當然可以！只要你有演奏樂器的能力，且看得懂五線譜，我們非常歡迎爵士新手加入一起學習！
+                    3. 練習地點在哪裡：我們的練習基地在「406臺中市北屯區瀋陽路二段198-2號7F」。
+                    
+                    # 對話原則
+                    1. 語氣要 Kawaii（可愛），多用表情符號 ✨🎷🎶。
+                    2. 若問題完全不相關，請禮貌地繞回音樂主題，例如：「這題超出了我的樂譜範圍，不過你要不要聽聽看 JazzShip 的招募資訊？」
+                `;
+                // ---------------------
+
                 try {
                     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                         method: 'POST',
@@ -145,7 +171,7 @@
                                         value={input} 
                                         onChange={(e) => setInput(e.target.value)}
                                         onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                                        placeholder="問問招募細節..." 
+                                        placeholder="想問什麼？問問報名或是地點吧！" 
                                         className="flex-1 px-4 py-2 rounded-full border-none focus:ring-2 focus:ring-[#8ECAE6] text-sm"
                                     />
                                     <button onClick={handleSend} className="bg-[#F4A261] text-white p-2 rounded-full hover:scale-110 transition-transform"><Icon name="send" size={18} /></button>
@@ -252,7 +278,7 @@
                                     <span className="text-[10px] font-bold text-[#F4A261] uppercase tracking-widest text-left">JazzShip Orchestra</span>
                                 </div>
                             </div>
-                            <div className="hidden md:flex space-x-8 font-medium">
+                            <div className="hidden md:flex space-x-8 font-medium text-sm lg:text-base">
                                 <a href="#hero" className="hover:text-[#F4A261] transition-colors">首頁</a>
                                 <a href="#recruitment" className="hover:text-[#F4A261] transition-colors">招募項目</a>
                                 <a href="#director" className="hover:text-[#F4A261] transition-colors">樂團指揮</a>
